@@ -1,5 +1,6 @@
 add_executable(BlockTest
     BlockTest.cpp
+    BlockChain.cpp
 )
 
 # turn on -g flag
