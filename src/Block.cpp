@@ -3,21 +3,21 @@
 #include <openssl/sha.h>
 
 
-std::string Block::getData() {
+int Block::getData() {
     return data;
 }
 
-void Block::setData(std::string data) {
+void Block::setData(int data) {
     this->data = data;
     hash = "";
 }
 
-std::string Block::getMagicNumber() {
-    return magicNumber;
+int Block::getNonce() {
+    return nonce;
 }
 
-void Block::setMagicNumber(std::string magicNumber) {
-    this->magicNumber = magicNumber;
+void Block::setNonce(int nonce) {
+    this->nonce = nonce;
     hash = "";
 }
 
@@ -35,10 +35,16 @@ std::string Block::getHash() {
         return hash;
     }
     
-    std::string input = data + magicNumber + previousHash;
+    //TODO: replace with a zero-copy solution
+    size_t inputSize = sizeof(data) + sizeof(nonce) + previousHash.size();
+    unsigned char * input = new unsigned char(inputSize);
+    std::memcpy(input, &data, sizeof(data));
+    std::memcpy(input + sizeof(data), &nonce, sizeof(nonce));
+    std::memcpy(input + sizeof(data) + sizeof(nonce), previousHash.c_str(), previousHash.size());
+
     unsigned char hashBuffer[SHA256_DIGEST_LENGTH];
-    
-    SHA256(reinterpret_cast<const unsigned char*>(input.c_str()), input.size(), hashBuffer);
+
+    SHA256(const_cast<const unsigned char*>(input), inputSize, hashBuffer);
     hash = std::string(reinterpret_cast<char*>(hashBuffer), SHA256_DIGEST_LENGTH);
 
     return hash;

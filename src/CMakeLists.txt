@@ -4,6 +4,7 @@ add_executable(BlockTest
     BlockTest.cpp
     BlockChain.cpp
     Block.cpp
+    Miner.cpp
 )
 
 target_link_libraries(BlockTest

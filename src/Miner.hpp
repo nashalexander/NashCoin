@@ -1,11 +1,11 @@
 #ifndef MINER_HPP
 #define MINER_HPP
 
-#include "Types.hpp"
+#include "Block.hpp"
 
 class Miner {
-    public:
-        void mineBlock(Block & block);
+public:
+    bool mineBlock(Block & block, int difficulty);
 };
 
 #endif

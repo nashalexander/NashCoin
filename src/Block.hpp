@@ -5,11 +5,11 @@
 
 class Block {
 public:
-    std::string getData();
-    void setData(std::string data);
+    int getData();
+    void setData(int data);
 
-    std::string getMagicNumber();
-    void setMagicNumber(std::string magicNumber);
+    int getNonce();
+    void setNonce(int nonce);
 
     std::string getPreviousHash();
     void setPreviousHash(std::string previousHash);
@@ -17,8 +17,8 @@ public:
     std::string getHash();
 
 private:
-    std::string data;
-    std::string magicNumber;
+    int data;
+    int nonce;
     std::string previousHash;
     
     // Cached value, invalidated when any other field is set
