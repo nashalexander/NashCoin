@@ -4,6 +4,10 @@ void BlockChain::updateDifficulty(int difficulty) {
     this->difficulty = difficulty;
 }
 
+int BlockChain::getDifficulty() const {
+    return difficulty;
+}
+
 void BlockChain::addBlock(Block newBlock) {
     if(chain.size() > 0 && newBlock.getPreviousHash() != getLatestBlock().getHash()) {
         return;

@@ -8,6 +8,7 @@
 class BlockChain {
     public:
         void updateDifficulty(int difficulty);
+        int getDifficulty() const;
 
         void addBlock(Block newBlock);
 

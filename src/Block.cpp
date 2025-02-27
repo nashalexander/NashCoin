@@ -1,7 +1,5 @@
 #include "Block.hpp"
-
 #include <openssl/sha.h>
-
 
 int Block::getData() {
     return data;
