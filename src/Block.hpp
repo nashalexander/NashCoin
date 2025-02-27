@@ -2,25 +2,38 @@
 #define TYPES_HPP
 
 #include <string>
+#include <openssl/sha.h>
 
 class Block {
 public:
-    int getData();
+    bool mineBlock();
+
+    int getData() const;
     void setData(int data);
 
-    int getNonce();
+    int getNonce() const;
     void setNonce(int nonce);
 
-    std::string getPreviousHash();
+    int getDifficulty() const;
+    void setDifficulty(int difficulty);
+
+    // TODO: fix this string nonsense
+    std::string getPreviousHash() const;
     void setPreviousHash(std::string previousHash);
 
     std::string getHash();
 
 private:
-    int data;
-    int nonce;
-    std::string previousHash;
-    
+    union {
+        struct{
+            uint32_t data;
+            uint32_t nonce;
+            uint32_t difficulty;
+            unsigned char previousHash[SHA256_DIGEST_LENGTH];
+        };
+        unsigned char block[sizeof(uint32_t)*3 + SHA256_DIGEST_LENGTH];
+    } dataBlock;
+
     // Cached value, invalidated when any other field is set
     std::string hash;
 };

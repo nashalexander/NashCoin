@@ -1,30 +1,55 @@
 #include "Block.hpp"
-#include <openssl/sha.h>
+#include <climits>
 
-int Block::getData() {
-    return data;
+bool Block::mineBlock() {
+    for(int i = 0; i < INT_MAX; i++) {
+        setNonce(i);
+
+        for(int j = 0; j < dataBlock.difficulty; j++) {
+            if(getHash()[j] != '0') {
+                break;
+            }
+            else if(j == dataBlock.difficulty - 1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int Block::getData() const {
+    return dataBlock.data;
 }
 
 void Block::setData(int data) {
-    this->data = data;
+    dataBlock.data = data;
     hash = "";
 }
 
-int Block::getNonce() {
-    return nonce;
+int Block::getNonce() const {
+    return dataBlock.nonce;
 }
 
 void Block::setNonce(int nonce) {
-    this->nonce = nonce;
+    dataBlock.nonce = nonce;
     hash = "";
 }
 
-std::string Block::getPreviousHash() {
-    return previousHash;
+int Block::getDifficulty() const {
+    return dataBlock.difficulty;
+}
+
+void Block::setDifficulty(int difficulty) {
+    dataBlock.difficulty = difficulty;
+    hash = "";
+}
+
+std::string Block::getPreviousHash() const {
+    return std::string(dataBlock.previousHash, SHA256_DIGEST_LENGTH);
 }
 
 void Block::setPreviousHash(std::string previousHash) {
-    this->previousHash = previousHash;
+    dataBlock.previousHash = previousHash.c_str();
     hash = "";
 }
 
@@ -32,17 +57,9 @@ std::string Block::getHash() {
     if(!hash.empty()) {
         return hash;
     }
-    
-    //TODO: replace with a zero-copy solution
-    size_t inputSize = sizeof(data) + sizeof(nonce) + previousHash.size();
-    unsigned char * input = new unsigned char(inputSize);
-    std::memcpy(input, &data, sizeof(data));
-    std::memcpy(input + sizeof(data), &nonce, sizeof(nonce));
-    std::memcpy(input + sizeof(data) + sizeof(nonce), previousHash.c_str(), previousHash.size());
 
     unsigned char hashBuffer[SHA256_DIGEST_LENGTH];
-
-    SHA256(const_cast<const unsigned char*>(input), inputSize, hashBuffer);
+    SHA256(dataBlock, sizeof(dataBlock), hashBuffer);
     hash = std::string(reinterpret_cast<char*>(hashBuffer), SHA256_DIGEST_LENGTH);
 
     return hash;
