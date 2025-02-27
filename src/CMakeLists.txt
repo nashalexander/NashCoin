@@ -1,6 +1,14 @@
+find_package(OpenSSL REQUIRED)
+
 add_executable(BlockTest
     BlockTest.cpp
     BlockChain.cpp
+    Block.cpp
+)
+
+target_link_libraries(BlockTest
+    PRIVATE
+        OpenSSL::Crypto
 )
 
 # turn on -g flag

@@ -5,11 +5,11 @@ void BlockChain::updateDifficulty(int difficulty) {
 }
 
 void BlockChain::addBlock(Block newBlock) {
-    if(chain.size() > 0 && newBlock.previousHash != getLatestBlock().hash) {
+    if(chain.size() > 0 && newBlock.getPreviousHash() != getLatestBlock().getHash()) {
         return;
     }
     for(int i = 0 ; i < difficulty; i++) {
-        if(newBlock.hash[i] != '0') {
+        if(newBlock.getHash()[i] != '0') {
             // Invalid block difficulty
             return;
         }
@@ -22,7 +22,7 @@ bool BlockChain::isChainValid() {
         Block currentBlock = chain[i];
         Block previousBlock = chain[i - 1];
 
-        if(currentBlock.previousHash != previousBlock.hash) {
+        if(currentBlock.getPreviousHash() != previousBlock.getHash()) {
             return false;
         }
         else {

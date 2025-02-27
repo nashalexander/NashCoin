@@ -1,7 +1,9 @@
 #ifndef BLOCK_CHAIN_HPP
 #define BLOCK_CHAIN_HPP
 
-#include "Types.hpp"
+#include "Block.hpp"
+
+#include <vector>
 
 class BlockChain {
     public:
@@ -20,4 +22,4 @@ class BlockChain {
 
 };
 
-#ifndef
+#endif
